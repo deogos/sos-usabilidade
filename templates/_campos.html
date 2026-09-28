@@ -1,0 +1,56 @@
+<div class="field">
+  <label for="titulo">Título <span aria-hidden="true">*</span></label>
+  <input id="titulo" name="titulo" type="text" maxlength="120" required
+         value="{{ dados.get('titulo', '') }}" placeholder="Ex.: Botão de confirmar pouco visível"
+         {% if erros.get('titulo') %}aria-invalid="true" aria-describedby="erro-titulo"{% endif %}>
+  {% if erros.get('titulo') %}<p class="field-error" id="erro-titulo">{{ erros.titulo }}</p>{% endif %}
+</div>
+
+<div class="field-grid">
+  <div class="field">
+    <label for="sistema">Sistema <span aria-hidden="true">*</span></label>
+    {% if editando %}
+      <input id="sistema" type="text" value="{{ dados.get('sistema', '') }}" readonly>
+      <small>O sistema permanece igual após a edição.</small>
+    {% else %}
+      <input id="sistema" name="sistema" type="text" required
+             value="{{ dados.get('sistema', '') }}" placeholder="Ex.: App Banco (fictício)"
+             {% if erros.get('sistema') %}aria-invalid="true" aria-describedby="erro-sistema"{% endif %}>
+      {% if erros.get('sistema') %}<p class="field-error" id="erro-sistema">{{ erros.sistema }}</p>{% endif %}
+    {% endif %}
+  </div>
+
+  <div class="field">
+    <label for="categoria">Categoria <span aria-hidden="true">*</span></label>
+    <select id="categoria" name="categoria" required
+            {% if erros.get('categoria') %}aria-invalid="true" aria-describedby="erro-categoria"{% endif %}>
+      <option value="">Selecione uma categoria</option>
+      {% for valor, rotulo in [('navegacao', 'Navegação'), ('formulario', 'Formulário'), ('feedback', 'Feedback'), ('acessibilidade', 'Acessibilidade'), ('outro', 'Outro')] %}
+        <option value="{{ valor }}" {% if dados.get('categoria') == valor %}selected{% endif %}>{{ rotulo }}</option>
+      {% endfor %}
+    </select>
+    {% if erros.get('categoria') %}<p class="field-error" id="erro-categoria">{{ erros.categoria }}</p>{% endif %}
+  </div>
+</div>
+
+<fieldset class="field severity-field" {% if erros.get('gravidade') %}aria-describedby="erro-gravidade"{% endif %}>
+  <legend>Gravidade <span aria-hidden="true">*</span></legend>
+  <div class="radio-group">
+    {% for valor, rotulo in [('baixa', 'Baixa'), ('media', 'Média'), ('alta', 'Alta')] %}
+      <label class="radio-option">
+        <input type="radio" name="gravidade" value="{{ valor }}" required
+               {% if dados.get('gravidade') == valor %}checked{% endif %}>
+        <span>{{ rotulo }}</span>
+      </label>
+    {% endfor %}
+  </div>
+  {% if erros.get('gravidade') %}<p class="field-error" id="erro-gravidade">{{ erros.gravidade }}</p>{% endif %}
+</fieldset>
+
+<div class="field">
+  <label for="descricao">Descrição <span aria-hidden="true">*</span></label>
+  <textarea id="descricao" name="descricao" rows="5" required
+            placeholder="Descreva objetivamente o que aconteceu e o impacto para quem usa o sistema."
+            {% if erros.get('descricao') %}aria-invalid="true" aria-describedby="erro-descricao"{% endif %}>{{ dados.get('descricao', '') }}</textarea>
+  {% if erros.get('descricao') %}<p class="field-error" id="erro-descricao">{{ erros.descricao }}</p>{% endif %}
+</div>

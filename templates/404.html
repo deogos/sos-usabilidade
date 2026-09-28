@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block titulo %}Problema não encontrado · SOS Usabilidade{% endblock %}
+{% block conteudo %}
+  <section class="not-found card"><span class="error-code">404</span><h1>Problema não encontrado</h1><p>{{ mensagem }}</p><a class="button button-primary" href="{{ url_for('listar') }}">Voltar para a listagem</a></section>
+{% endblock %}

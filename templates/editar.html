@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block titulo %}Editar problema #{{ problema.id }} · SOS Usabilidade{% endblock %}
+{% block conteudo %}
+  <a class="back-link" href="{{ url_for('listar') }}">← Voltar para a listagem</a>
+  <div class="page-heading"><div><p class="eyebrow">Problema #{{ problema.id }}</p><h1>Editar problema</h1><p>Revise as informações e salve as alterações.</p></div></div>
+  {% if erros %}
+    <div class="alert alert-erro" role="alert"><strong>Não foi possível salvar.</strong><ul>{% for mensagem in erros.values() %}<li>{{ mensagem }}</li>{% endfor %}</ul></div>
+  {% endif %}
+  <section class="card" aria-labelledby="titulo-edicao">
+    <div class="card-header"><span class="section-icon" aria-hidden="true">✎</span><div><h2 id="titulo-edicao">Dados do problema</h2><p>Criado em {{ problema.criado_em }}</p></div></div>
+    <form method="post" action="{{ url_for('editar', identificador=problema.id) }}" class="form-body">
+      {% set editando = true %}
+      {% include '_campos.html' %}
+      <div class="form-actions"><button class="button button-primary" type="submit">Salvar alterações</button><a class="button button-secondary" href="{{ url_for('listar') }}">Cancelar</a></div>
+    </form>
+  </section>
+{% endblock %}

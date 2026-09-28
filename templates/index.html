@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">Registro local</p>
+      <h1>Problemas de interface</h1>
+      <p>Registre exemplos fictícios e acompanhe os achados de usabilidade em um só lugar.</p>
+    </div>
+    <span class="count-badge">{{ problemas|length }} {{ 'problema' if problemas|length == 1 else 'problemas' }}</span>
+  </div>
+
+  {% if erros %}
+    <div class="alert alert-erro" role="alert">
+      <strong>Não foi possível registrar o problema.</strong>
+      <ul>{% for mensagem in erros.values() %}<li>{{ mensagem }}</li>{% endfor %}</ul>
+    </div>
+  {% endif %}
+
+  <section class="card" aria-labelledby="titulo-cadastro">
+    <div class="card-header">
+      <span class="section-icon" aria-hidden="true">01</span>
+      <div><h2 id="titulo-cadastro">Registrar novo problema</h2><p>Todos os campos são obrigatórios.</p></div>
+    </div>
+    <form method="post" action="{{ url_for('cadastrar') }}" class="form-body">
+      {% set editando = false %}
+      {% include '_campos.html' %}
+      <div class="form-actions">
+        <button class="button button-primary" type="submit">Registrar problema</button>
+        <button class="button button-secondary" type="reset">Limpar</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card list-card" aria-labelledby="titulo-listagem">
+    <div class="card-header">
+      <span class="section-icon" aria-hidden="true">02</span>
+      <div><h2 id="titulo-listagem">Problemas registrados</h2><p>Mais recentes primeiro.</p></div>
+    </div>
+    {% if problemas %}
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th scope="col">#</th><th scope="col">Título</th><th scope="col">Sistema</th><th scope="col">Categoria</th><th scope="col">Gravidade</th><th scope="col">Data</th><th scope="col">Ações</th></tr></thead>
+          <tbody>
+            {% for problema in problemas %}
+              <tr>
+                <td class="muted">{{ problema.id }}</td>
+                <td class="title-cell">{{ problema.titulo }}</td>
+                <td>{{ problema.sistema }}</td>
+                <td><span class="tag">{{ {'navegacao': 'Navegação', 'formulario': 'Formulário', 'feedback': 'Feedback', 'acessibilidade': 'Acessibilidade', 'outro': 'Outro'}[problema.categoria] }}</span></td>
+                <td><span class="severity severity-{{ problema.gravidade }}">{{ {'baixa': 'Baixa', 'media': 'Média', 'alta': 'Alta'}[problema.gravidade] }}</span></td>
+                <td class="muted date-cell">{{ problema.criado_em }}</td>
+                <td class="actions-cell">
+                  <a class="button button-small button-secondary" href="{{ url_for('editar', identificador=problema.id) }}">Editar</a>
+                  <details class="delete-control">
+                    <summary class="button button-small button-danger-outline">Excluir</summary>
+                    <div class="delete-confirm">
+                      <p>Excluir este problema permanentemente?</p>
+                      <form method="post" action="{{ url_for('excluir', identificador=problema.id) }}">
+                        <button class="button button-small button-danger" type="submit">Sim, excluir</button>
+                      </form>
+                    </div>
+                  </details>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state"><span aria-hidden="true">□</span><h3>Nenhum problema registrado ainda</h3><p>Use o formulário acima para começar.</p></div>
+    {% endif %}
+  </section>
+{% endblock %}

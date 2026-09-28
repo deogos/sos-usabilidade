@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block titulo %}SOS Usabilidade{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="brand" href="{{ url_for('listar') }}" aria-label="SOS Usabilidade, página inicial">
+          <span class="brand-icon" aria-hidden="true">+</span>
+          <span>SOS <strong>Usabilidade</strong></span>
+        </a>
+        <span class="header-note">Painel de problemas de interface</span>
+      </header>
+
+      <main id="conteudo">
+        {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
+          <div class="alert alert-{{ categoria }}" role="status">{{ mensagem }}</div>
+        {% endfor %}
+        {% block conteudo %}{% endblock %}
+      </main>
+
+      <footer class="site-footer">SOS Usabilidade · Atividade Flask + SQLite · Dados de exemplo</footer>
+    </div>
+  </body>
+</html>
